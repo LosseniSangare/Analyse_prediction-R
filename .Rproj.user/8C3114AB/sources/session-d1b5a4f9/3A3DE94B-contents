@@ -136,4 +136,7 @@ system.time(sum(rep(1,10^8)))
 install.packages("tidyverse")
 library(tidyverse)
 
+pi
+options(digits = 19)
+pi
 # RMarkdow
