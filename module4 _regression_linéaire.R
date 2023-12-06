@@ -63,5 +63,13 @@ table(prev,Souscription$y) # nous donne combien a été bien predir et mal préd
 rm(list = ls())
 Souscription <- read.csv("D:/UTT/PROGRAMATION R/Data/Souscription.csv", encoding="UTF-8", sep=";")
 library(rpart)
-arbre<-rpart(y ~., data = Souscription ,cp =0.02)
+#install.packages("rpart.plot")
+library(rpart.plot)
+arbre<-rpart(y ~., data = Souscription ,cp =0.01)
 arbre
+rpart.plot(arbre, main="Arbre de decision")
+prev_arbre = predict(arbre, data = Souscription)
+prev_arbre_cl = predict(arbre, data = Souscription, type="class")
+prev_arbre_cl
+table(prev_arbre_cl, Souscription$y)
+mean(prev_arbre_cl==Souscription$y) # voir si on est est pas en surapprentissage
