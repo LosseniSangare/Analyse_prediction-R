@@ -94,7 +94,21 @@ pred2 = predict(rl2,type = "response")
 ggplot(ozone)+aes(x=ozone$T15,y=ozone$maxO3)+geom_point(color="blue")+geom_line(aes(y=pred2), color="#00d000",lwd=2)+theme_light()
 ```
 
+#Regression Multiple
+```{r}
+rlm = lm(ozone$maxO3 ~.,data = ozone)
+summary(rlm)
+```
+Avec toute les variables on a un modele plus explicatif soit 76,61% de R²
 
 
+##choix automatique de nos variable avec la methode step
+```{r}
+rlm_step = step(rlm)
+rlm_step_md = lm(ozone$maxO3 ~ T12 + Ne9 + Vx9 + maxO3v, data = ozone)
+summary(rlm_step_md)
+```
+
+Avec les Variables T12, Ne9, Vx9 et maxO3v on on perd moins d'information.. on explique max02 avec 76,22 % de R²
 
 

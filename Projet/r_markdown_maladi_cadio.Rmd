@@ -7,6 +7,7 @@ output: html_document
 texte du rapport
 
 # Regression logistique
+Pour la partie 2 nous avons décidé de choisir nos propre données. Notre objectif sera d'appréhender les facteurs pouvant influencer l'apparition d'une maladie coronarienne à des fins de prévision.
 ```{r}
 rm(list = ls())
 df <- read.csv("D:/UTT/PROGRAMATION R/R intitiation/Projet/Dataset_Maladie_Cadiovasculaire.txt", row.names=1, sep=";")
