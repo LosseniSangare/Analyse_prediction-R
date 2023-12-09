@@ -33,4 +33,3 @@ head(sales_pred_mult)
 
 #ici la courbe n'esst pas linéaire car plusieurs variables
 ggplot(df)+aes(x=TV,y=Sales) +geom_point()+geom_line(aes(y=sales_pred_mult))+theme_minimal() 
-

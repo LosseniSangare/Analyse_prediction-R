@@ -1,0 +1,36 @@
+---
+title: "Arbre de decision"
+author: "Losseni SANGARE"
+date: "2023-12-09"
+output: html_document
+---
+
+
+```{r}
+rm(list=ls())
+df <- read.csv("D:/UTT/PROGRAMATION R/Data/Souscription.csv", sep=";")
+View(df)
+library("rpart")
+arbre = rpart(y~.,data=df,cp=0.02)
+arbre
+```
+##Affichage de l'Arbre
+```{r}
+library("rpart.plot")
+rpart.plot(arbre,main="Representation de l'arbre")
+```
+
+## verification de la performance du modele
+```{r}
+pred = predict(arbre, data=df, type="class")
+head(df$y)
+head(pred)
+
+table(df$y)
+table(pred)
+table(pred,df$y)
+mean(pred==df$y)
+```
+
+```
+
