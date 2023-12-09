@@ -1,0 +1,100 @@
+---
+title: "Ozone_regression_simple"
+author: "Losseni SANGARE"
+date: "2023-12-09"
+output:
+  html_document: default
+  pdf_document: default
+---
+#REGRESSION SIMPLE Avec OZONE.txt
+```{r}
+rm(list = ls())
+```
+
+##Chargement du fichier
+```{r}
+ozone <- read.csv("D:/UTT/PROGRAMATION R/Data/ozone.txt", sep="")
+View(ozone)
+```
+
+##quelques statistiques descriptives
+```{r}
+summary(ozone)
+str(ozone)
+```
+
+toute les variabbles sont numeric hormis la direction du vent et le types de pluie
+effectuons des transformations sur nos varible pluie et vent en les transformant en numerique afin de verifier les corrélation 
+
+```{r}
+library(dplyr)
+ozone = mutate(ozone, vent=case_when(vent == "Nord" ~ 1,
+                                     vent=="Sud" ~ 2,
+                                     vent=="Est" ~ 3,
+                                     vent=="Ouest" ~ 4))
+
+```
+
+verifion les valeurs unique la varible pluie puis effectuons nos transformation
+```{r}
+unique(ozone$pluie)
+ozone = mutate(ozone, pluie=case_when(pluie=="Sec" ~ 0,
+                                     pluie=="Pluie" ~ 1))
+
+```
+Nous avons transformer la variable pluie en bouléen. 1 si pluie, 0 sinon
+
+```{r}
+pairs(ozone)
+cor(ozone)
+```
+
+La concentration en ozone maxO3 est visiblement plus corrélé positivement à 78,42 % avec la température à 12h. 
+
+### Bien avant d'étudier la relation de max03 par rappor a T15, éffectuons le travail par rapport a T12
+```{r}
+library(ggplot2)
+ggplot(ozone)+aes(x =ozone$T12,y = ozone$maxO3)+geom_point(color="blue")+ geom_smooth(method = "lm", color="red", lwd=2)+theme_light()
+```
+
+## Modélisation de maxo3 en fonction de  T12
+```{r}
+rl = lm(ozone$maxO3 ~ ozone$T12)
+summary(rl)
+```
+
+les coefficients estimés sont β0 = -27.4196 et β1 = 5.4687 avec des t value différent de 0
+
+l'erreur standard de résidu qui une mesure de la précision du model est de 17,57 sur 110 dégré de liberté.
+R² nous montre que 61,51 % des données sont expliqués par le model, et avec un p-value inférieur à 5%.
+
+```{r}
+pred = predict(rl, type = "response")
+ggplot(ozone)+aes(x=ozone$T12,y=ozone$maxO3)+geom_point(color="blue")+geom_line(aes(y=pred),color="red",lwd=2)+theme_light()
+```
+
+### étudions maintenant la relation de max03 par rappor à T15
+
+```{r}
+ggplot(ozone)+aes(x = ozone$T15, y=ozone$maxO3)+geom_point()+geom_smooth(method ="lm",color="red",lwd=2)
+```
+
+##modelisation du model de regression linéaire simple de max03 en fonction de T15
+
+```{r}
+rl2 = lm(ozone$maxO3 ~ ozone$T15)
+summary(rl2)
+```
+
+cette fois l'erreur standard de résidu est un peu plus élévé que celui de T12 et le R² plus inférieur a celui de T12, soit 60% vs 60,51%
+visiblement le model avec la variable indépendante T12 explique mieux la concentration en ozone maxO3.
+
+```{r}
+pred2 = predict(rl2,type = "response")
+ggplot(ozone)+aes(x=ozone$T15,y=ozone$maxO3)+geom_point(color="blue")+geom_line(aes(y=pred2), color="#00d000",lwd=2)+theme_light()
+```
+
+
+
+
+
