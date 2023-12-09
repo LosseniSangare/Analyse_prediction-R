@@ -79,3 +79,46 @@ on remarque une que le model avec les 5 variables a une précision supérieur à
 table(prev2,df$chd)
 ```
 on a 256 vrai négatif et 87 vrai positif
+
+
+#Arbre de décision
+
+```{r}
+rm(list=ls())
+df <- read.csv("D:/UTT/PROGRAMATION R/R intitiation/Projet/Dataset_Maladie_Cadiovasculaire.txt", row.names=1, sep=";")
+View(df)
+#df = mutate(df,chd=case_when(chd==1~"yes", chd==0~"no"))
+
+library(rpart)
+arbre = rpart(chd~.,data = df, cp=0.013, method = "class")
+arbre
+```
+
+##Affichage de l'arbre
+
+```{r}
+library(rpart.plot)
+rpart.plot(arbre, main="representation de l'arbre")
+```
+
+## verification de la performance du modele
+
+```{r}
+pred_arb = predict(arbre,data=df, type = "class")
+
+table(df$chd)
+table(pred_arb)
+mean(pred_arb==df$chd)
+```
+
+l'arbre de décision prédir explique mieux chd par rapport a la regression logistique. En effet nous avons une precisicion de 78,35% contre 74,24%.
+
+##Table de confusion
+
+```{r}
+table(pred_arb,df$chd)
+```
+
+ce modele nous donne 279 vrai négatifs et 83 vrai positif
+
+
