@@ -1,0 +1,124 @@
+---
+title: "maladie_cardio"
+author: "Losseni SANGARE"
+date: "2023-12-07"
+output: html_document
+---
+texte du rapport
+
+# Regression logistique
+Pour la partie 2 nous avons décidé de choisir nos propre données. Notre objectif sera d'appréhender les facteurs pouvant influencer l'apparition d'une maladie coronarienne à des fins de prévision.
+```{r}
+rm(list = ls())
+df <- read.csv("D:/UTT/PROGRAMATION R/R intitiation/Projet/Dataset_Maladie_Cadiovasculaire.txt", row.names=1, sep=";")
+View(df)
+
+```
+
+
+###Modelisatio de la regression logistique
+```{r}
+str(df)
+summary(df)
+rlg = glm(df$chd~.,data = df,family = binomial)
+```
+
+
+```{r}
+summary(rlg)
+```
+
+###Analyse
+on remarque une bonne estimation pour intercept avec un p-value tres inférieur a 0.05 aussi pour les coéficiant des varible independate famhistPresent, age ensuite tobacco,ldl,typea.
+
+avec ce model nous avons une Déviance Nulle qui mesure l'ajustement du model par rapport au model null qui n'inclut que l'intercept. plus il elle est grande meilleure est le model. dans notres cas nous avons 596 pour 461 dégré de liberté.
+nous avont également la déviance résiduel qui est associé au model avec tous les variables indépendantes présentes.
+cette valeur est de 472.14 pour 452 dégré de liberté. ce qui suggère une amélioration du modèle, ce qui peut être positif.
+le dégré de le liberté pour la déviance résiduel est inférieur au dégré de liberté pour la déviance null(452 vs 461). ce qui veux dir que le model à utiliser moins de paramètre pour expliquer le model.
+on note l'AIC = 492,4
+
+```{r}
+prev = predict(rlg, type = "response")
+head(df$chd)
+head(prev)
+prev=as.numeric(prev>0.5)
+head(prev)
+```
+
+###choix de variable
+```{r}
+final_rlg =step(rlg)
+step_rlg=glm(df$chd ~ tobacco + ldl + famhist + typea + age, data = df,family=binomial)
+summary(step_rlg)
+```
+
+##Analyse
+Avec seulement 5 variables independante on remarque que l'AIC est passé a 487,69 qui inférieur à 492,14 obténu auparavant avec toutes les varibles independante.
+
+```{r}
+prev2 =predict(step_rlg,type = "response")
+head(df$chd)
+head(prev)
+prev2=as.numeric(prev2>0.5)
+head(prev2)
+```
+
+```{r}
+table(df$chd)
+table(prev)
+table(prev2)
+
+mean(prev==df$chd)
+mean(prev2==df$chd)
+```
+
+on remarque une que le model avec les 5 variables a une précision supérieur à celui du prémier model soit 74,24 % contre 73,37%
+
+## Table de confusion
+```{r}
+table(prev2,df$chd)
+```
+on a 256 vrai négatif et 87 vrai positif
+
+
+#Arbre de décision
+
+```{r}
+rm(list=ls())
+df <- read.csv("D:/UTT/PROGRAMATION R/R intitiation/Projet/Dataset_Maladie_Cadiovasculaire.txt", row.names=1, sep=";")
+View(df)
+#df = mutate(df,chd=case_when(chd==1~"yes", chd==0~"no"))
+
+library(rpart)
+arbre = rpart(chd~.,data = df, cp=0.013, method = "class")
+arbre
+```
+
+##Affichage de l'arbre
+
+```{r}
+library(rpart.plot)
+rpart.plot(arbre, main="representation de l'arbre")
+```
+
+## verification de la performance du modele
+
+```{r}
+pred_arb = predict(arbre,data=df, type = "class")
+
+table(df$chd)
+table(pred_arb)
+mean(pred_arb==df$chd)
+```
+
+l'arbre de décision prédir explique mieux chd par rapport a la regression logistique. En effet nous avons une precisicion de 78,35% contre 74,24%.
+
+##Table de confusion
+
+```{r}
+table(pred_arb,df$chd)
+```
+
+ce modele nous donne 279 vrai négatifs et 83 vrai positif
+
+

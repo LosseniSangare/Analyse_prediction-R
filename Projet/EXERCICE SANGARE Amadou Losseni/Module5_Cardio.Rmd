@@ -1,0 +1,65 @@
+---
+title: "knn"
+author: "Losseni SANGARE"
+output: html_document
+---
+#MODULE 5 KNN
+
+##UTILISATION DE  Dataset_Maladie_Cadiovasculaire.txt
+
+###IMPORTATION FICHIER
+```{r}
+rm(list = ls())
+Dataset <- read.csv("D:/UTT/PROGRAMATION R/R intitiation/Projet/Dataset_Maladie_Cadiovasculaire.txt", row.names=1, sep=";")
+View(Dataset)
+
+```
+
+##Transformation et séparation en train validation
+```{r}
+library(dplyr)
+Dataset <- mutate(Dataset, famhist = case_when(famhist == "Absent" ~ 0, TRUE ~ 1))
+set.seed(1234)
+cardio=Dataset[sample(nrow(Dataset)),] # melange de ligne
+app=cardio[1:300,]
+valid=cardio[-(1:300),]
+```
+
+#application du KNN
+```{r}
+library(class)
+knn_cardio=knn(app[,-ncol(app)],valid[,-ncol(valid)],cl=app$chd,k=3)
+mean(knn_cardio !=valid$chd)
+```
+
+
+###choix automatique de k entre 1 et 9
+```{r}
+grille_k = data.frame(k=seq(1,9, by=1))
+options(repos = c(CRAN = "https://cran.r-project.org"))# pour permettre l'execution du Knit
+
+install.packages("caret")
+library(caret)
+
+ctrl = trainControl(method = "LGOCV",index = list(1:300)) # method="cv" pour validation croisé
+# Methode leave -group -out cross - validation
+sel_k1 = train(chd ~ ., data = cardio, method = "knn", trControl = ctrl, tuneGrid = grille_k)
+
+sel_k1
+plot(sel_k1)
+
+```
+
+## Réajuster le modèle k-NN avec la meilleure valeur de k
+
+```{r}
+
+knn_model=knn(app[,-ncol(app)],valid[,-ncol(valid)],cl=app$chd,k=9)
+
+# Faire des prédictions sur l'ensemble de validation
+predictions <- as.factor(knn_model)
+mean(knn_model!=valid$chd)
+```
+
+
+On remarque effectivement qu'avec K=9 on a une meilleur précision. soit un taux d'erreur de 33,95% contre 40,74% pour k=3

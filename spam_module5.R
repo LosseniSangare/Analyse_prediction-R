@@ -28,5 +28,4 @@ sel_k1 = train(type ~ ., data = spam1, method = "knn", trControl = ctrl1, tuneGr
 sel_k1$bestTune
 plot(sel_k1)
 
-#Dans ce contexte, la valeur de k qui donne la meilleure précision est k=1, 
-#avec une accuracy de 80.76% et un coefficient kappa de 0.60.
+

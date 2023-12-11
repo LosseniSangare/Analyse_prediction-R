@@ -1,0 +1,60 @@
+---
+title: "Projet_Modul5"
+author: "Losseni SANGARE"
+output: html_document
+---
+#MODULE 5
+
+##KNN Et Random Forest
+Nous utilison le jeu de donné souscription pour ce projet
+
+###importationn des données
+```{r}
+rm(list=ls())
+souscription <- read.csv("D:/UTT/PROGRAMATION R/Data/Souscription.csv", sep=";")
+View(souscription)
+```
+
+notre variable cible est y qui permet de savoir si un client contacté ayant comme caracteristiques les varibles dependante a soucrir a un produit ou pas
+
+#Convertissez les variables catégorielles en variables indicatrices (dummy variables).
+
+```{r}
+library(dplyr)
+souscription <- mutate(souscription, y = case_when(y == "no" ~ 0, TRUE ~ 1))
+
+library(caret)
+# Création de l'objet de transformation pour l'ensemble de données complet
+souscription_dummy <- dummyVars(" ~ .", data = souscription)
+
+# Transformation de l'ensemble de données complet
+souscription_dummy <- predict(souscription_dummy, newdata = souscription)
+
+souscription_dummy <- as.data.frame(souscription_dummy)
+
+summary(souscription_dummy)
+```
+
+
+nous allons utilisé pour la suite la méthode de KNN et Random Forest.
+
+##KNN
+###séparation des données en train validation
+```{r}
+set.seed(123)  # Pour la reproductibilité
+indices <- createDataPartition(souscription_dummy$y, p = 0.7, list = FALSE)
+indices <- createDataPartition(souscription_dummy$y, p = 0.7, list = FALSE)
+table(souscription_dummy$y)
+
+
+```
+
+### Application de KNN
+```{r}
+library(class)
+knn_model <- knn(train_data[, -ncol(train_data)], valid_data[, -ncol(valid_data)], cl = train_data$y, k = 3)
+
+
+mean(knn_model != valid_data$y)
+```
+

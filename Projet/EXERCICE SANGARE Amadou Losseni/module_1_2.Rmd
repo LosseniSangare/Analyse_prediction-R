@@ -1,0 +1,165 @@
+---
+title: "Module-1-2"
+author: "Losseni SANGARE"
+output: html_document
+---
+```{r}
+# Vecteur avec des multiples de 3
+nouveaux_multiples_de_3 <- seq(3, 50, 3)
+
+# Fonction "tronquer()"
+tronquer <- function(seuil, vecteur) {
+  vecteur[vecteur > seuil] <- seuil
+  return(vecteur)
+}
+
+# Seuil pour la fonction tronquer
+seuil_troncage <- 25
+vecteur_tronque <- tronquer(seuil_troncage, nouveaux_multiples_de_3)
+cat("Nouveaux multiples de 3 :", nouveaux_multiples_de_3, "\n")
+cat("Vecteur tronqué :", vecteur_tronque, "\n") 
+
+# Fonction "maximal()"
+maximal <- function(vecteur) {
+  if (length(vecteur) == 0) {
+    stop("Le vecteur est vide.")
+  }
+  
+  max_element <- vecteur[1]
+  
+  for (i in 2:length(vecteur)) {
+    if (vecteur[i] > max_element) {
+      max_element <- vecteur[i]
+    }
+  }
+  
+  return(max_element)
+}
+
+# Utilisation de la fonction "maximal()"
+resultat_maximal <- maximal(nouveaux_multiples_de_3)
+cat("Le maximum du vecteur est :", resultat_maximal, "\n")
+
+# Création d'un tableau de données
+donnees_personnelles <- data.frame(
+  Prenom = c("ALICE", "BOB", "CHARLOTTE", "DAVID", "ELISE", "FRANK"),
+  Nom = c("SMITH", "JOHNSON", "WILLIAMS", "JONES", "BROWN", "DAVIS"),
+  Age = c(30, 32, 28, 31, 29, 45),
+  Entreprise = c("IBM", "GOOGLE", "MICROSOFT", "APPLE", "AMAZON", "FACEBOOK")
+)
+
+# Affichage du tableau de données
+print(donnees_personnelles)
+
+# Calcul de la moyenne des âges
+moyenne_des_ages <- mean(donnees_personnelles$Age)
+cat("La moyenne des âges est :", moyenne_des_ages, "\n")
+
+# **** Exercice - Module 2 **** 
+
+# Question 1
+setwd("D:/UTT/PROGRAMATION R/R intitiation/Data")
+# Charger les données PISA France
+pisa_france <- read.table("D:/UTT/PROGRAMATION R/R intitiation/Data/PisaFR.csv", header = TRUE, sep = ";", dec = ",", na = " ")
+
+# Charger les données PISA USA
+pisa_usa <- read.table("D:/UTT/PROGRAMATION R/R intitiation/Data/Pisaus.csv", header = TRUE, sep = ";", dec = ",", na = " ")
+
+# Afficher la structure des données pour PISA France
+str(pisa_france)
+
+# Afficher la structure des données pour PISA USA
+str(pisa_usa)
+
+# Question 2 
+# Supprimer la colonne GLCM
+donnees_pisa <- subset(pisa_france, select = -GLCM)
+
+# Supprimer les observations qui ne satisfont pas les conditions
+donnees_pisa <- donnees_pisa[donnees_pisa$READ + donnees_pisa$MATH >= 1000 & donnees_pisa$SCIE >= 500, ]
+
+# Effectuer un histogramme des notes en sciences (SCIE)
+histogramme_science <- hist(donnees_pisa$SCIE, main = "Histogramme des notes en sciences (SCIE)", xlab = "Notes en sciences (SCIE)", col = "lightblue", border = "black")
+
+# Question 3
+# Charger les packages
+library(dplyr)
+library(ggplot2)
+
+# Supprimer la colonne GLCM
+donnees_pisa <- select(pisa_france, -GLCM)
+
+# Supprimer les observations qui ne satisfont pas les conditions
+donnees_pisa <- donnees_pisa %>%
+  filter(READ + MATH >= 1000, SCIE >= 500)
+
+# Effectuer un histogramme des notes en sciences (SCIE)
+histogramme_science_ggplot <- ggplot(donnees_pisa, aes(x = SCIE)) +
+  geom_histogram(binwidth = 20, fill = "lightblue", color = "black") +
+  labs(title = "Histogramme des notes en sciences (SCIE)",
+       x = "Notes en sciences (SCIE)",
+       y = "Fréquence")
+
+print(histogramme_science_ggplot)
+
+# Question 4
+#colnames(pisa_france)
+# Charger le package
+library(dplyr)
+
+# Exemple de manipulation des données
+donnees_manipulees_pisa <- pisa_france %>%
+  # Sélectionner certaines colonnes
+  select(X, COUNT, MATH, READ, SCIE, GLCM, RCLI, RCUN, RCER, RTSN, RTML) %>%
+  
+  # Renommer certaines colonnes
+  rename(ID_etudiant = X, Lecture = READ) %>%
+  
+  # Filtrer les observations selon des conditions
+  filter(Lecture + MATH >= 1000, SCIE >= 500) %>%
+  
+  # Trier les données par la colonne SCIE
+  arrange(SCIE) %>%
+  
+  # Ajouter une nouvelle colonne calculée
+  mutate(Somme_Lecture_MATH = Lecture + MATH) %>%
+  
+  # Regrouper les données par la colonne ID_etudiant
+  group_by(ID_etudiant) %>%
+  
+  # Retirer temporairement la colonne groupée
+  relocate(ID_etudiant) %>%
+  
+  # Travailler sur les groupes (par exemple, calculer la moyenne)
+  summarise(Moyenne_Somme_Lecture_MATH = mean(Somme_Lecture_MATH)) %>%
+  
+  # Remettre la colonne groupée à sa place
+  relocate(ID_etudiant, .before = "Moyenne_Somme_Lecture_MATH") %>%
+  
+  # Sélectionner les premières 5 observations
+  slice(1:5)
+
+# Afficher les données manipulées
+print(donnees_manipulees_pisa)
+
+# Question 5
+# Supprimer toutes les données existantes
+rm(list = ls())
+
+pisa_france <- read.table("D:/UTT/PROGRAMATION R/R intitiation/Data/PisaFR.csv", header = TRUE, sep = ";", dec = ",", na = " ")
+
+# Afficher les premières lignes du jeu de données
+head(pisa_france)
+
+# Statistiques descriptives
+resume_pisa_france <- summary(pisa_france)
+
+# Graphique des boîtes (boxplot) pour les notes en mathématiques (MATH)
+boxplot_math <- boxplot(pisa_france$MATH, main = "Boîte à moustaches pour les notes en mathématiques (MATH)")
+
+# Histogramme pour les notes en lecture (READ)
+histogramme_lecture <- hist(pisa_france$READ, main = "Histogramme pour les notes en lecture (READ)", xlab = "Notes en lecture")
+
+
+```
+

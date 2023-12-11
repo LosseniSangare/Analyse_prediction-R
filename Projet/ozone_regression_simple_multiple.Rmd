@@ -1,5 +1,5 @@
 ---
-title: "Ozone_regression_simple"
+title: "Ozone_regression_simple_multiple"
 author: "Losseni SANGARE"
 date: "2023-12-09"
 output:
