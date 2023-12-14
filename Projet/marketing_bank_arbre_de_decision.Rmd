@@ -1,0 +1,58 @@
+---
+title: "Marketing_Bank_Arbre_de_decision"
+author: "ISOLA Obédi Omokayodé"
+date: "2023-12-13"
+output: html_document
+---
+
+#ARBRE DE DECISION 
+
+## Chargement des fichiers
+```{r}
+souscription <- read.csv("D:/UTT/PROGRAMATION R/Data/Souscription.csv", sep=";")
+View(souscription)
+```
+
+##Importation de la librairie de, l'arbre de decision
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+install.packages("rpart")
+library(rpart)
+```
+## les données en ensembles d'entraînement (70%) et de test (30%)
+```{r}
+set.seed(123)  # Pour la reproductibilité
+indices <- sample(1:nrow(souscription), size = 0.7 * nrow(souscription))
+train_data <- df[indices, ]
+test_data <- df[-indices, ]
+```
+
+## suppression de la cible y des donnée de test
+```{r}
+test_data = test_data[,-ncol(test_data)]
+```
+
+##Modelisation par l'arbre de decision de la variable dependante y en fonction des autres variable
+```{r}
+arbre = rpart(y~.,data = train_data, cp=0.015)
+arbre
+```
+
+## affichage de l'arbre produit sur notre jeu de données d'entrainement
+
+pour cela nous avons besoin d'importer le module plot de la librairie rapart que nous venon de charger
+```{r}
+install.packages("rpart.plot")
+library("rpart.plot")
+rpart.plot(arbre,main="Representation de l'arbre")
+```
+
+##prediction sur les données de test
+
+```{r}
+pred = predict(arbre, data=test_data, type = "class")
+```
+
+##comparaison par rapport à la 
