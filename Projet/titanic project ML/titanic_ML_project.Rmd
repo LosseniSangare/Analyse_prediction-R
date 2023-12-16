@@ -1,0 +1,102 @@
+---
+title: "Untitled"
+author: "Losseni SANGARE"
+date: "2023-12-14"
+output: html_document
+---
+
+##importation de données
+```{r}
+titanic <- read.csv("D:/UTT/PROGRAMATION R/R intitiation/Projet/titanic project ML/titanic_data.csv", row.names=1)
+View(titanic)
+
+```
+
+```{r}
+options(repos = c(CRAN = "https://cran.r-project.org"))# pour permettre l'execution du Knit
+```
+
+
+```{r}
+tail(titanic)
+dim(titanic)
+```
+
+#Mélange des données
+
+```{r}
+shuffle_index = sample(1:nrow(titanic))
+head(shuffle_index)
+titanic = titanic[shuffle_index,]
+head(titanic)
+```
+
+##Netoyage de données
+nous avons des donnée manquante dans nos données(NA). nous allon effectuer le netoyage comme suite  : 
+
+Supprimez les variables home.dest, cabine, nom et ticket
+Créer des variables factorielles pour pclass et survécu
+Abandonnez le NA
+
+```{r}
+titanic=titanic[titanic$age != "?" & titanic$fare != "?", ]
+titanic$age <- as.integer(as.character(titanic$age))
+titanic$fare <- as.numeric(as.character(titanic$fare))
+```
+
+
+```{r}
+library(dplyr)
+#suppression des variable
+
+clean_titanic = titanic %>% select(-c(home.dest, cabin, name, ticket)) %>% 
+  #conversion des données 
+  mutate(pclass = factor(pclass, levels = c(1, 2, 3), labels = c('Moyen', 'Moyen', 'Inferieur')),
+         survived = factor(survived, levels = c(0, 1), labels = c('No', 'Yes'))) %>%
+  na.omit()
+glimpse(clean_titanic)
+```
+
+
+#creation ensemble d'entrainement et validation
+
+
+```{r}
+  set.seed(1234)  # Pour la reproductibilité
+  indices <- sample(1:nrow(clean_titanic), size = 0.8 * nrow(clean_titanic))
+  data_train <- clean_titanic[indices, ]
+  data_test <- clean_titanic[-indices, ]
+```
+
+```{r}
+dim(data_train)
+dim(data_test)
+prop.table(table(data_train$survived))
+prop.table(table(data_test$survived))
+```
+
+##installation de la librairie rpart.plot pour affichage de l'arbre
+
+```{r}
+install.packages("rpart.plot")
+library(rpart.plot)
+```
+
+#cronstruction du model
+```{r}
+fit <- rpart(survived~., data = data_train, cp=0.01, method = 'class')
+rpart.plot(fit)
+```
+
+
+```{r}
+predict_unseen <-predict(fit, newdata=data_test, type = 'class')
+
+length(predict_unseen)
+```
+
+```{r}
+table_mat <- table(data_test$survived, predict_unseen)
+table_mat
+```
+

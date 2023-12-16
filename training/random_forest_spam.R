@@ -22,4 +22,5 @@ plot(sel_mtry)
 
 foret_optimale <- randomForest(type ~ ., data = app, mtry = 6)
 pred <- predict(foret_optimale, data = valid)
+table(foret)
 mean(pred==spam$type)

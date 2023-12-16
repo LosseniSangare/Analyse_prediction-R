@@ -1,0 +1,396 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Marketing\_Bank\_Arbre\_de\_decision},
+  pdfauthor={ISOLA Obédi Omokayodé},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Marketing\_Bank\_Arbre\_de\_decision}
+\author{ISOLA Obédi Omokayodé}
+\date{2023-12-13}
+
+\begin{document}
+\maketitle
+
+\#ARBRE DE DECISION
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\AttributeTok{CRAN =} \StringTok{"https://cran.r{-}project.org"}\NormalTok{))}\CommentTok{\# pour permettre l\textquotesingle{}execution du Knit}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{rm}\NormalTok{(}\AttributeTok{list=}\FunctionTok{ls}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{chargement-des-fichiers}{%
+\subsection{Chargement des fichiers}\label{chargement-des-fichiers}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{souscription }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"D:/UTT/PROGRAMATION R/Data/Souscription.csv"}\NormalTok{, }\AttributeTok{sep=}\StringTok{";"}\NormalTok{)}
+\FunctionTok{View}\NormalTok{(souscription)}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#Importation de la librairie de, l'arbre de decision
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Installation du package dans 'C:/Users/LOSSENI SANGARE/AppData/Local/R/win-library/4.3'
+## (car 'lib' n'est pas spécifié)
+\end{verbatim}
+
+\begin{verbatim}
+## le package 'dplyr' a été décompressé et les sommes MD5 ont été vérifiées avec succés
+## 
+## Les packages binaires téléchargés sont dans
+##  C:\Users\LOSSENI SANGARE\AppData\Local\Temp\RtmpwbOKs9\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: le package 'dplyr' a été compilé avec la version R 4.3.2
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attachement du package : 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"rpart"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Installation du package dans 'C:/Users/LOSSENI SANGARE/AppData/Local/R/win-library/4.3'
+## (car 'lib' n'est pas spécifié)
+\end{verbatim}
+
+\begin{verbatim}
+## le package 'rpart' a été décompressé et les sommes MD5 ont été vérifiées avec succés
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: impossible de supprimer l'installation précédente du package 'rpart'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in file.copy(savedcopy, lib, recursive = TRUE): problème lors de la
+## copie de C:\Users\LOSSENI
+## SANGARE\AppData\Local\R\win-library\4.3\00LOCK\rpart\libs\x64\rpart.dll vers
+## C:\Users\LOSSENI
+## SANGARE\AppData\Local\R\win-library\4.3\rpart\libs\x64\rpart.dll: Permission
+## denied
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: 'rpart' restauré
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Les packages binaires téléchargés sont dans
+##  C:\Users\LOSSENI SANGARE\AppData\Local\Temp\RtmpwbOKs9\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(rpart)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: le package 'rpart' a été compilé avec la version R 4.3.2
+\end{verbatim}
+
+\hypertarget{les-donnuxe9es-en-ensembles-dentrauxeenement-70-et-de-test-30}{%
+\subsection{les données en ensembles d'entraînement (70\%) et de test
+(30\%)}\label{les-donnuxe9es-en-ensembles-dentrauxeenement-70-et-de-test-30}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{set.seed}\NormalTok{(}\DecValTok{1234}\NormalTok{)  }\CommentTok{\# Pour la reproductibilité}
+\NormalTok{  indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(souscription), }\AttributeTok{size =} \FloatTok{0.7} \SpecialCharTok{*} \FunctionTok{nrow}\NormalTok{(souscription))}
+\NormalTok{  train\_data }\OtherTok{\textless{}{-}}\NormalTok{ souscription[indices, ]}
+\NormalTok{  test\_data }\OtherTok{\textless{}{-}}\NormalTok{ souscription[}\SpecialCharTok{{-}}\NormalTok{indices, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{sauvegarde-et-suppression-de-la-cible-y-des-donnuxe9e-de-test}{%
+\subsection{sauvegarde et suppression de la cible y des donnée de
+test}\label{sauvegarde-et-suppression-de-la-cible-y-des-donnuxe9e-de-test}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#cible\_test = test\_data$y}
+\CommentTok{\#test\_data = test\_data[,{-}ncol(test\_data)]}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#Modelisation par l'arbre de decision de la variable dependante y en
+fonction des autres variable
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arbre }\OtherTok{=} \FunctionTok{rpart}\NormalTok{(y}\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}\AttributeTok{data =}\NormalTok{ train\_data, }\AttributeTok{cp=}\FloatTok{0.02}\NormalTok{)}
+\NormalTok{arbre}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## n= 2883 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 2883 324 no (0.88761707 0.11238293)  
+##    2) nr.employed>=5087.65 2508 154 no (0.93859649 0.06140351)  
+##      4) duration< 567.5 2284  56 no (0.97548161 0.02451839) *
+##      5) duration>=567.5 224  98 no (0.56250000 0.43750000)  
+##       10) duration< 838.5 139  44 no (0.68345324 0.31654676) *
+##       11) duration>=838.5 85  31 yes (0.36470588 0.63529412) *
+##    3) nr.employed< 5087.65 375 170 no (0.54666667 0.45333333)  
+##      6) duration< 165.5 131  24 no (0.81679389 0.18320611) *
+##      7) duration>=165.5 244  98 yes (0.40163934 0.59836066)  
+##       14) pdays>=15.5 176  85 yes (0.48295455 0.51704545)  
+##         28) duration< 390.5 127  56 no (0.55905512 0.44094488) *
+##         29) duration>=390.5 49  14 yes (0.28571429 0.71428571) *
+##       15) pdays< 15.5 68  13 yes (0.19117647 0.80882353) *
+\end{verbatim}
+
+\hypertarget{affichage-de-larbre-produit-sur-notre-jeu-de-donnuxe9es-dentrainement}{%
+\subsection{affichage de l'arbre produit sur notre jeu de données
+d'entrainement}\label{affichage-de-larbre-produit-sur-notre-jeu-de-donnuxe9es-dentrainement}}
+
+pour cela nous avons besoin d'importer le module plot de la librairie
+rpart que nous venons de charger
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"rpart.plot"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Installation du package dans 'C:/Users/LOSSENI SANGARE/AppData/Local/R/win-library/4.3'
+## (car 'lib' n'est pas spécifié)
+\end{verbatim}
+
+\begin{verbatim}
+## le package 'rpart.plot' a été décompressé et les sommes MD5 ont été vérifiées avec succés
+## 
+## Les packages binaires téléchargés sont dans
+##  C:\Users\LOSSENI SANGARE\AppData\Local\Temp\RtmpwbOKs9\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(}\StringTok{"rpart.plot"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: le package 'rpart.plot' a été compilé avec la version R 4.3.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{rpart.plot}\NormalTok{(arbre,}\AttributeTok{main=}\StringTok{"Representation de l\textquotesingle{}arbre"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{marketing_bank_arbre_de_decision_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\#\#prediction sur les données de test
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred }\OtherTok{=} \FunctionTok{predict}\NormalTok{(arbre, }\AttributeTok{data=}\NormalTok{test\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#comparaison de la prédiction par rapport aux vrai valeur y de
+l'ensemble de test
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{length}\NormalTok{(pred)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5766
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{length}\NormalTok{(test\_data}\SpecialCharTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1236
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{length}\NormalTok{(train\_data}\SpecialCharTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2883
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#table(test\_data$y, pred)}
+
+\FunctionTok{dim}\NormalTok{(train\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2883   21
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dim}\NormalTok{(test\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1236   21
+\end{verbatim}
+
+\end{document}

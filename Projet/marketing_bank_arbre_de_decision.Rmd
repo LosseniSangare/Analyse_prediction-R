@@ -2,10 +2,20 @@
 title: "Marketing_Bank_Arbre_de_decision"
 author: "ISOLA Obédi Omokayodé"
 date: "2023-12-13"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 #ARBRE DE DECISION 
+```{r}
+options(repos = c(CRAN = "https://cran.r-project.org"))# pour permettre l'execution du Knit
+```
+
+```{r}
+rm(list=ls())
+```
+
 
 ## Chargement des fichiers
 ```{r}
@@ -16,33 +26,34 @@ View(souscription)
 ##Importation de la librairie de, l'arbre de decision
 
 ```{r}
-install.packages("dplyr")
+#install.packages("dplyr")
 library(dplyr)
-install.packages("rpart")
+#install.packages("rpart")
 library(rpart)
 ```
 ## les données en ensembles d'entraînement (70%) et de test (30%)
 ```{r}
-set.seed(123)  # Pour la reproductibilité
-indices <- sample(1:nrow(souscription), size = 0.7 * nrow(souscription))
-train_data <- df[indices, ]
-test_data <- df[-indices, ]
+  set.seed(1234)  # Pour la reproductibilité
+  indices <- sample(1:nrow(souscription), size = 0.7 * nrow(souscription))
+  train_data <- souscription[indices, ]
+  test_data <- souscription[-indices, ]
 ```
 
-## suppression de la cible y des donnée de test
+## sauvegarde et suppression de la cible y des donnée de test
 ```{r}
-test_data = test_data[,-ncol(test_data)]
+#cible_test = test_data$y
+#test_data = test_data[,-ncol(test_data)]
 ```
 
 ##Modelisation par l'arbre de decision de la variable dependante y en fonction des autres variable
 ```{r}
-arbre = rpart(y~.,data = train_data, cp=0.015)
+arbre = rpart(y~.,data = train_data, cp=0.02)
 arbre
 ```
-
+##Methode CART
 ## affichage de l'arbre produit sur notre jeu de données d'entrainement
 
-pour cela nous avons besoin d'importer le module plot de la librairie rapart que nous venon de charger
+pour cela nous avons besoin d'importer le module plot de la librairie rpart que nous venons de charger
 ```{r}
 install.packages("rpart.plot")
 library("rpart.plot")
@@ -52,7 +63,38 @@ rpart.plot(arbre,main="Representation de l'arbre")
 ##prediction sur les données de test
 
 ```{r}
-pred = predict(arbre, data=test_data, type = "class")
+pred = predict(arbre, newdata=test_data, type = 'class')
+
 ```
 
-##comparaison par rapport à la 
+##comparaison de la prédiction par rapport aux vrai valeur y de l'ensemble de test
+
+```{r}
+length(pred)
+#y_test = test_data$y
+length(train_data$y)
+#table(test_data$y, pred)
+
+dim(train_data)
+dim(test_data)
+```
+
+
+```{r}
+mean(pred == test_data$y)
+table(pred, test_data$y)
+```
+La methode CART nous donne une precision de 92,55% sur les données de test .
+la Matrice de confusion nous donne comme détail 1084 vrai négatif (y == "no" et la prediction a donnée "no"), et 60 vrai positif((y == "yes" et la prediction a donnée "yes")
+
+#Méthode CHAID
+
+```{r}
+install.packages("partykit")
+library(partykit)
+```
+
+
+
+
+

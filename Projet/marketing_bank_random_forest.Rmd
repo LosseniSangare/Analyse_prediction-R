@@ -1,0 +1,101 @@
+---
+title: "marketing_bank_random_forest"
+author: "Isola Obedi"
+date: "2023-12-14"
+output: html_document
+---
+```{r}
+options(repos = c(CRAN = "https://cran.r-project.org"))# pour permettre l'execution du Knit
+```
+
+
+## Random forest
+```{r}
+rm(list=ls())
+
+```
+
+
+
+```{r}
+souscription <- read.csv("D:/UTT/PROGRAMATION R/Data/Souscription.csv", sep=";")
+View(souscription)
+
+```
+
+
+```{r}
+str(souscription)
+```
+
+## Convertir toutes les variables en facteurs
+
+```{r}
+souscription$job <- as.factor(souscription$job)
+souscription$marital <- as.factor(souscription$marital)
+souscription$education <- as.factor(souscription$education)
+souscription$default <- as.factor(souscription$default)
+souscription$housing <- as.factor(souscription$housing)
+souscription$loan <- as.factor(souscription$loan)
+souscription$contact <- as.factor(souscription$contact)
+souscription$month <- as.factor(souscription$month)
+souscription$day_of_week <- as.factor(souscription$day_of_week)
+souscription$poutcome <- as.factor(souscription$poutcome)
+souscription$y <- as.factor(souscription$y)
+
+```
+
+
+## les données en ensembles d'entraînement (70%) et de test (30%)
+```{r}
+  set.seed(1234)  # Pour la reproductibilité
+  indices <- sample(1:nrow(souscription), size = 0.7 * nrow(souscription))
+  train_data <- souscription[indices, ]
+  test_data <- souscription[-indices, ]
+```
+
+```{r}
+install.packages("randomForest")
+library(randomForest)
+```
+
+
+```{r}
+set.seed(1234)
+foret = randomForest(y~., data=train_data)
+```
+
+```{r}
+foret
+plot(foret)
+```
+
+###optimisation du nombre de variable choisi pour construir un nouveau noeud par validation croisé
+```{r}
+grille_mtry = data.frame(mtry=seq(1,10, by=1))
+library(caret)
+
+ctrl = trainControl(method = "cv",index = list(1:dim(train_data)[1])) # method="cv" pour validation croisé
+sel_mtry = train(y ~ ., data = souscription, method = "rf", trControl = ctrl, tuneGrid = grille_mtry)
+```
+
+##affichage du meilleur du meuilleur hyperparametre mtry et son accuracy
+
+```{r}
+plot(sel_mtry)
+sel_mtry
+```
+
+on remarque que le nombre de paramètres optimal est mtry = 8 avec un accuracy de 90,37%
+
+## prediction sur l'ensemble de test 
+```{r}
+set.seed(1234)
+foret_test = randomForest(y~., data=test_data, mtry=8)
+foret_test
+```
+##Analyse sur la prediction
+apres choix ajustement de notre model avec 8 comme nombre de parametre choisir à la construction d'un arbre (mtry =8), la prediction sur l'ensemble de test nous donne une précision de 80,33%. 
+la matrice de confusion nous donne 1073 vrai negatif et 60 vrai positif
+
+

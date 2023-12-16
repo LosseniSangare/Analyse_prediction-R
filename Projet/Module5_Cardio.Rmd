@@ -35,8 +35,10 @@ mean(knn_cardio !=valid$chd)
 
 ###choix automatique de k entre 1 et 9
 ```{r}
-grille_k = data.frame(k=seq(1,9, by=1))
+
 options(repos = c(CRAN = "https://cran.r-project.org"))# pour permettre l'execution du Knit
+
+grille_k = data.frame(k=seq(1,9, by=1))
 
 install.packages("caret")
 library(caret)
